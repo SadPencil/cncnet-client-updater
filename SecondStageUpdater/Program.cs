@@ -43,7 +43,7 @@ internal sealed class Program
             Write("CnCNet Client Second-Stage Updater", true, ConsoleColor.Green);
             Write(string.Empty);
 
-            if (args.Length < 2 || string.IsNullOrEmpty(args[0]) || string.IsNullOrEmpty(args[1]) || !SafePath.GetDirectory(args[1].Replace("\"", null, StringComparison.OrdinalIgnoreCase)).Exists)
+            if (args.Length < 2 || string.IsNullOrEmpty(args[0]) || string.IsNullOrEmpty(args[1]) || !SafePath.GetDirectory(args[1].Replace("\"", null)).Exists)
             {
                 Write("Invalid arguments given!", true, ConsoleColor.Red);
                 Write("Usage: <client_executable_name> <base_directory>");
@@ -53,7 +53,7 @@ internal sealed class Program
             else
             {
                 string clientExecutable = args[0];
-                DirectoryInfo baseDirectory = SafePath.GetDirectory(args[1].Replace("\"", null, StringComparison.OrdinalIgnoreCase));
+                DirectoryInfo baseDirectory = SafePath.GetDirectory(args[1].Replace("\"", null));
                 DirectoryInfo resourceDirectory = SafePath.GetDirectory(baseDirectory.FullName, "Resources");
                 FileInfo logFile = SafePath.GetFile(SafePath.CombineFilePath(baseDirectory.FullName, "Client", "SecondStageUpdater.log"));
 
@@ -165,8 +165,8 @@ internal sealed class Program
 
                     string[] lines = File.ReadAllLines(SafePath.CombineFilePath(resourceDirectory.FullName, "ClientDefinitions.ini"));
                     string launcherPropertyName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "LauncherExe" : "UnixLauncherExe";
-                    string line = lines.Single(q => q.Trim().StartsWith(launcherPropertyName, StringComparison.OrdinalIgnoreCase) && q.Contains('=', StringComparison.OrdinalIgnoreCase));
-                    int commentStart = line.IndexOf(';', StringComparison.OrdinalIgnoreCase);
+                    string line = lines.Single(q => q.Trim().StartsWith(launcherPropertyName, StringComparison.OrdinalIgnoreCase) && q.Contains("=", StringComparison.OrdinalIgnoreCase));
+                    int commentStart = line.IndexOf(";", StringComparison.OrdinalIgnoreCase);
 
                     if (commentStart >= 0)
                         line = line[..commentStart];
